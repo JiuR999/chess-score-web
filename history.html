@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史记录</title>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="history-container">
+        <header class="history-header">
+            <button id="backBtn" class="back-btn"><i class="material-icons">arrow_back</i></button>
+            <h2>历史记录</h2>
+        </header>
+        
+        <div class="history-list">
+            <div class="history-item">
+                <div class="history-time">2023-10-20 15:30</div>
+                <div class="history-info">
+                    <span>参与人数：4人</span>
+                    <span>我的得分：150</span>
+                </div>
+                <div class="history-result">排名：第1名</div>
+            </div>
+            <!-- 更多历史记录... -->
+        </div>
+        
+        <div class="pagination">
+            <button class="page-btn">上一页</button>
+            <span class="page-info">第1页 / 共10页</span>
+            <button class="page-btn">下一页</button>
+        </div>
+    </div>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

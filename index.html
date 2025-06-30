@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>棋牌计分系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>棋牌计分系统</h1>
+        </header>
+        <main>
+            <div class="btn-group">
+                <button id="createRoom" class="main-btn">创建房间</button>
+                <button id="joinRoom" class="main-btn">加入房间</button>
+                <button id="history" class="main-btn">历史记录</button>
+            </div>
+        </main>
+        <footer>
+            <p>© 2023 棋牌计分系统</p>
+        </footer>
+    </div>
+    <!-- 加入房间弹窗 -->
+    <div id="joinRoomModal" class="modal">
+      <div class="modal-content">
+        <h2>加入房间</h2>
+        <div class="modal-input">
+          <label for="modalRoomId">房间ID:</label>
+          <input type="text" id="modalRoomId" placeholder="请输入房间ID">
+        </div>
+        <div class="modal-input">
+          <label for="modalUserName">游戏昵称:</label>
+          <input type="text" id="modalUserName" placeholder="请输入游戏昵称">
+        </div>
+        <div class="modal-buttons">
+          <button id="modalCancelBtn">取消</button>
+          <button id="modalConfirmBtn">确认</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
