@@ -1,0 +1,87 @@
+#messageList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  display: flex;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  display: flex;
+  max-width: 85vw; /* 最大宽度为视口的 70% */
+  padding: 10px 14px;
+  border-radius: 18px;
+  word-wrap: break-word; /* 超出时自动换行（关键） */
+  word-break: break-word; /* 长单词或无空格文本也能断行 */
+  line-height: 1.4;
+  position: relative;
+  margin: 1px 0;
+}
+
+.messageBody {
+  display: flex;
+}
+
+.messageBody.self {
+  flex-direction: row-reverse;
+}
+
+.avatarMsg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0; /* 防止头像被压缩 */
+}
+
+.message.self {
+  max-width: 70vw;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-right: 6px; 
+  align-self: flex-end;
+  text-align: right;
+  border-bottom-left-radius: 4px;
+}
+
+.message.others {
+  /* background-color: #f8f9fa; */
+  background-color: #ffaaaa;
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-left: 6px;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px; /* 尖角效果留白 */
+  flex-direction: row;
+}
+
+.message.self::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-left: 10px solid #007bff;
+  right: -17px;
+  bottom: 10px;
+}
+
+.message.others::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-right: 10px solid #ffaaaa;
+  left: -17px;
+  bottom: 10px;
+}

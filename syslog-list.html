@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器日志监听 - 服务器列表</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@3.2.20/dist/antd.css">
+    <style>
+        .page-container { padding: 24px; }
+        .search-container { margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1 style="margin-bottom: 24px;">服务器日志监听</h1>
+        
+        <div class="search-container">
+            <input type="text" id="ipSearch" placeholder="输入IP地址搜索" 
+                   style="width: 300px; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px;">
+        </div>
+        
+        <table class="ant-table" style="width: 100%; border-collapse: collapse; border: 1px solid #e8e8e8;">
+            <thead>
+                <tr style="background-color: #fafafa;">
+                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e8e8e8;">序号</th>
+                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e8e8e8;">服务器IP</th>
+                    <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e8e8e8;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="serverTableBody">
+                <!-- 表格内容将通过JavaScript动态生成 -->
+            </tbody>
+        </table>
+        
+        <div class="ant-pagination" style="margin-top: 16px; text-align: right;">
+            <button class="ant-btn ant-btn-default" style="margin-right: 8px; padding: 4px 12px;">上一页</button>
+            <span style="margin: 0 8px;">第 1 页 / 共 5 页</span>
+            <button class="ant-btn ant-btn-default" style="margin-left: 8px; padding: 4px 12px;">下一页</button>
+        </div>
+    </div>
+
+    <script>
+        // 模拟服务器数据
+        const servers = [
+            { id: 1, ip: '192.168.1.100' },
+            { id: 2, ip: '192.168.1.101' },
+            { id: 3, ip: '192.168.1.102' },
+            { id: 4, ip: '192.168.1.103' },
+            { id: 5, ip: '192.168.1.104' },
+            { id: 6, ip: '192.168.1.105' },
+            { id: 7, ip: '192.168.1.106' },
+            { id: 8, ip: '192.168.1.107' },
+            { id: 9, ip: '192.168.1.108' },
+            { id: 10, ip: '192.168.1.109' }
+        ];
+
+        // 渲染服务器列表
+        function renderServerList(servers) {
+            const tableBody = document.getElementById('serverTableBody');
+            tableBody.innerHTML = '';
+
+            servers.forEach((server, index) => {
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #e8e8e8';
+                row.innerHTML = `
+                    <td style="padding: 12px;">${index + 1}</td>
+                    <td style="padding: 12px;">${server.ip}</td>
+                    <td style="padding: 12px;">
+                        <a href="syslog-tail.html?ip=${server.ip}" style="color: #1890ff; text-decoration: none;">监听</a>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderServerList(servers);
+
+            // 搜索功能
+            const searchInput = document.getElementById('ipSearch');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredServers = servers.filter(server => 
+                    server.ip.toLowerCase().includes(searchTerm)
+                );
+                renderServerList(filteredServers);
+            });
+        });
+    </script>
+</body>
+</html>

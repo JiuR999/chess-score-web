@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏房间</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/msg.css">
+</head>
+<body>
+    <div class="room-container">
+        <header class="room-header">
+            <button id="backBtn" class="back-btn">←</button>
+            <h2 id="roomName">房间名称</h2>
+        </header>
+        
+        <div class="user-list">
+            <!-- 更多用户... -->
+            <button id="inviteBtn" class="invite-btn">+</button>
+        </div>
+        
+        <div class="chat-area">
+            <div id="messageList" class="message-list">
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="输入消息...">
+                <button id="sendBtn">发送</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/room.js"></script>
+</body>
+</html>

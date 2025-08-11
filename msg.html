@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="message my-msg">这是我的消息</div>
+
+    <div class="message other-msg">这是别人的消息</div>
+  </body>
+
+  <script></script>
+
+  <style>
+    .message {
+      max-width: 70vw; /* 最大宽度为视口的 70% */
+      padding: 10px 14px;
+      border-radius: 18px;
+      word-wrap: break-word; /* 超出时自动换行（关键） */
+      word-break: break-word; /* 长单词或无空格文本也能断行 */
+      line-height: 1.4;
+      position: relative;
+      margin: 5px 0;
+    }
+
+    .message.my-msg {
+      max-width: 70;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .message.other-msg {
+      background-color: #f8f9fa;
+      color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .message.other-msg::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 10px solid transparent;
+      border-right: 10px solid #f8f9fa;
+      left: -20px;
+      bottom: 10px;
+    }
+  </style>
+</html>

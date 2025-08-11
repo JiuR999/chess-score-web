@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">容器样例</div>
+  </body>
+  <script>
+    const colors = [
+      "#1ec6a9",
+      "#ff7751",
+      "#bcece7",
+      "#bcece7",
+      "#FF1744",
+      "#00C853",
+      "#FF7043",
+    ];
+    for (let index = 0; index < 10; index++) {
+      const color = `#${Math.floor(Math.random() * 255)}${Math.floor(
+        Math.random() * 255
+      )}${Math.floor(Math.random() * 255)}`;
+
+      createColorCard(colors[index % 7]);
+    }
+
+    function createColorCard(color) {
+      const card = document.createElement("div");
+      card.classList.add("container");
+      // 固定透明度
+      const toRgba = (color, alpha) => {
+        // 简单处理 hex 到 rgba 的转换（支持 #rgb 和 #rrggbb）
+        let r, g, b;
+        if (color.startsWith("#")) {
+          const hex = color.slice(1);
+          if (hex.length === 3) {
+            r = parseInt(hex[0] + hex[0], 16);
+            g = parseInt(hex[1] + hex[1], 16);
+            b = parseInt(hex[2] + hex[2], 16);
+          } else {
+            r = parseInt(hex.slice(0, 2), 16);
+            g = parseInt(hex.slice(2, 4), 16);
+            b = parseInt(hex.slice(4, 6), 16);
+          }
+          return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+        // 如果已经是 rgba / rgb，可扩展处理，这里简化为只支持 hex
+        return `rgba(0, 255, 255, ${alpha})`; // fallback
+      };
+
+      const bgRgba = toRgba(color, 0.1);
+      const hoverRgba = toRgba(color, 0.3);
+      console.log(bgRgba);
+      card.innerText = bgRgba;
+      card.style.setProperty("--color", color);
+      card.style.setProperty("--hover-bg-color", hoverRgba);
+      card.style.setProperty("--bg-color", bgRgba);
+      document.body.appendChild(card);
+    }
+  </script>
+
+  <style>
+    .container {
+      position: relative;
+      padding: 8px;
+      margin: 1rem;
+      /* border-left: 2px solid #4096ff; */
+      border-radius: 2px;
+      background-color: var(--bg-color);
+      box-shadow: 0 0 10px #676565;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      background-color: var(--color);
+      width: 2px;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    .container:hover {
+      /* rgba */
+      background-color: var(--hover-bg-color);
+      transition: background-color 0.3s ease-out;
+      overflow: hidden;
+    }
+
+    /* 悬停背景滑入层 */
+    .container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: var(--hover-bg-color, rgba(0, 255, 255, 0.2));
+      z-index: 1;
+      transition: width 0.5s ease-out;
+      border-radius: inherit;
+    }
+
+    /* 悬停时：滑入背景 */
+    .container:hover::after {
+      width: 100%;
+    }
+  </style>
+</html>

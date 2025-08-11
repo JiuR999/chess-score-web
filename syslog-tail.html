@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务器日志监听 - 实时日志</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ant-design-vue@3.2.20/dist/antd.css">
+    <style>
+        .page-container { padding: 24px; }
+        .header { margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .log-container { height: 500px; border: 1px solid #e8e8e8; border-radius: 4px; padding: 16px; overflow-y: auto; background-color: #000; color: #fff; font-family: monospace; }
+        .log-line { margin: 4px 0; }
+        .controls { margin-top: 16px; display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <h1>实时日志监听</h1>
+            <button id="backBtn" class="ant-btn ant-btn-default">返回列表</button>
+        </div>
+
+        <div class="ant-card" style="margin-bottom: 16px;">
+            <div class="ant-card-body">
+                <h3>当前监听: <span id="serverIp" style="color: #1890ff;">加载中...</span></h3>
+            </div>
+        </div>
+
+        <div class="log-container" id="logContainer">
+            <div class="log-line">[系统信息] 正在连接日志服务器...</div>
+        </div>
+
+        <div class="controls">
+            <button id="pauseBtn" class="ant-btn ant-btn-default">暂停</button>
+            <button id="clearBtn" class="ant-btn ant-btn-default">清空日志</button>
+            <button id="copyBtn" class="ant-btn ant-btn-default">复制日志</button>
+        </div>
+    </div>
+
+    <script>
+        // 从URL获取服务器IP
+        function getServerIp() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('ip') || '未知IP';
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            const serverIp = getServerIp();
+            document.getElementById('serverIp').textContent = serverIp;
+
+            // 返回按钮事件
+            document.getElementById('backBtn').addEventListener('click', () => {
+                window.location.href = 'syslog-list.html';
+            });
+
+            // 日志容器
+            const logContainer = document.getElementById('logContainer');
+            let isPaused = false;
+            let logBuffer = [];
+
+            // 暂停按钮事件
+            document.getElementById('pauseBtn').addEventListener('click', (e) => {
+                isPaused = !isPaused;
+                e.target.textContent = isPaused ? '继续' : '暂停';
+                if (!isPaused && logBuffer.length > 0) {
+                    logBuffer.forEach(line => addLogLine(line));
+                    logBuffer = [];
+                }
+            });
+
+            // 清空日志按钮事件
+            document.getElementById('clearBtn').addEventListener('click', () => {
+                logContainer.innerHTML = '';
+                logBuffer = [];
+            });
+
+            // 复制日志按钮事件
+            document.getElementById('copyBtn').addEventListener('click', () => {
+                const logText = Array.from(logContainer.querySelectorAll('.log-line'))
+                    .map(line => line.textContent)
+                    .join('\n');
+                navigator.clipboard.writeText(logText).then(() => {
+                    alert('日志已复制到剪贴板');
+                });
+            });
+
+            // 添加日志行
+            function addLogLine(text) {
+                const line = document.createElement('div');
+                line.className = 'log-line';
+                line.textContent = text;
+                logContainer.appendChild(line);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+
+            // 模拟WebSocket连接和日志推送
+            function simulateWebSocket() {
+                addLogLine(`[系统信息] 已连接到 ${serverIp} 的日志服务`);
+                addLogLine(`[系统信息] 开始接收实时日志...\n`);
+
+                // 模拟日志生成
+                const logTypes = [
+                    'INFO', 'WARNING', 'ERROR', 'DEBUG', 'NOTICE'
+                ];
+                const logSources = [
+                    'kernel', 'sshd', 'nginx', 'mysql', 'syslogd'
+                ];
+
+                setInterval(() => {
+                    if (isPaused) {
+                        logBuffer.push(getLogLine());
+                        return;
+                    }
+                    addLogLine(getLogLine());
+                }, 1000);
+
+                // 生成模拟日志行
+                function getLogLine() {
+                    const now = new Date().toISOString();
+                    const type = logTypes[Math.floor(Math.random() * logTypes.length)];
+                    const source = logSources[Math.floor(Math.random() * logSources.length)];
+                    const pid = Math.floor(Math.random() * 1000) + 100;
+                    const message = getRandomLogMessage(type, source);
+                    return `[${now}] ${serverIp} ${source}[${pid}]: ${type}: ${message}`;
+                }
+
+                // 生成随机日志消息
+                function getRandomLogMessage(type, source) {
+                    const messages = {
+                        kernel: [
+                            'eth0: link up', 'system time synchronized', 'memory usage high: 85%', 'disk sda1 90% full'
+                        ],
+                        sshd: [
+                            'Accepted password for root from 10.0.0.1', 'Failed password for admin', 'session opened for user ubuntu', 'connection closed by 192.168.1.5'
+                        ],
+                        nginx: [
+                            'GET /index.html 200 1234', 'POST /api/login 401 567', 'client 203.0.113.2 disconnected', 'server reached max connections'
+                        ],
+                        mysql: [
+                            'connection established for user@192.168.1.100', 'query executed: SELECT * FROM users', 'slow query detected: 2.5s', 'innodb buffer pool size adjusted'
+                        ],
+                        syslogd: [
+                            'started daemon', 'log rotation completed', 'configuration reloaded', 'received signal SIGHUP'
+                        ]
+                    };
+
+                    const errorMessages = [
+                        'authentication failed', 'connection timeout', 'file not found', 'permission denied', 'resource unavailable'
+                    ];
+
+                    if (type === 'ERROR') {
+                        return errorMessages[Math.floor(Math.random() * errorMessages.length)];
+                    }
+
+                    return messages[source][Math.floor(Math.random() * messages[source].length)];
+                }
+            }
+
+            // 启动模拟WebSocket
+            simulateWebSocket();
+        });
+    </script>
+</body>
+</html>
